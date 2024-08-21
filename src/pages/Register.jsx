@@ -110,6 +110,7 @@ const Register = () => {
                                   <input
                                       type={item.type}
                                       value={data[item.id]}
+                                      id={item.label}
                                       className={`input ${data[item.id] ? 'border-customInputBorderPurple' : ''}`}
                                       onFocus={() => inputClicked(index)}
                                       onBlur={() => inputNotClicked(index)}
@@ -154,6 +155,7 @@ const Register = () => {
                                       <input 
                                           type="text"
                                           value={searchTerm}
+                                          id={searchTerm}
                                           onChange={handleSearch}
                                           className="p-2 border border-gray-300 rounded-lg w-full focus:outline-none"
                                           placeholder="Search career roles"
@@ -172,7 +174,8 @@ const Register = () => {
                               )}
                           </div>
                       </div>
-                      <button className={`mt-8 border border-customBlue p-2 w-customButtonWidth rounded-xl bg-customBlue text-white font-semibold text-base`}>Register</button>
+                      <p className='font-normal ml-3' style={{ fontSize: '0.7rem'}}>By clicking Register, you agree to our <Link to='/policies' className='text-customBlue font-semibold cursor-pointer underline'>User Agreement</Link></p>
+                      <button className={`mt-5 border border-customBlue p-2 w-customButtonWidth rounded-xl bg-customBlue text-white font-semibold text-base`}>Register</button>
                       <div className='mt-2 text-gray-400 text-center'>
                           Already Have an Account?
                           <span className='text-customBlue font-medium underline underline-offset-4 cursor-pointer'>

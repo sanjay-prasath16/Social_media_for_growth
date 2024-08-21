@@ -83,6 +83,7 @@ const Login = () => {
                     <input
                       type={item.type}
                       value={data[item.id]}
+                      id={item.id}
                       className={`input ${data[item.id] ? 'border-customInputBorderPurple' : ''}`}
                       onFocus={() => inputClicked(index)}
                       onBlur={() => inputNotClicked(index)}
@@ -118,7 +119,8 @@ const Login = () => {
                   <a href="" className='text-customBlue font-medium underline underline-offset-4'>Forgot Password?</a>
                 </div>
               </div>
-              <button type='submit' className='mt-12 border border-customBlue p-2 w-customButtonWidth rounded-xl bg-customBlue text-white font-semibold text-base'>Login</button>
+              <p className='font-normal ml-5 mt-3' style={{ fontSize: '0.7rem'}}>By clicking Login, you agree to our <Link to='/policies' className='text-customBlue font-semibold cursor-pointer underline'>User Agreement</Link></p>
+              <button type='submit' className='mt-3 border border-customBlue p-2 w-customButtonWidth rounded-xl bg-customBlue text-white font-semibold text-base'>Login</button>
               <div className='mt-2 text-gray-400 text-center'>
                 Not Yet Have an Account?
                 <span className='text-customBlue font-medium underline underline-offset-4 cursor-pointer'>
