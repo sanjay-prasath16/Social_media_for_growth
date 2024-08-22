@@ -1,10 +1,10 @@
-package Socialmedia.EducationPost.Project;
+package socialEducationPost.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EducationPostProjectApplicationTests {
+class ServerApplicationTests {
 
 	@Test
 	void contextLoads() {

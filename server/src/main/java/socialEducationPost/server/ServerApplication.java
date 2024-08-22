@@ -1,13 +1,13 @@
-package Socialmedia.EducationPost.Project;
+package socialEducationPost.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EducationPostProjectApplication {
+public class ServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EducationPostProjectApplication.class, args);
+		SpringApplication.run(ServerApplication.class, args);
 	}
 
 }
