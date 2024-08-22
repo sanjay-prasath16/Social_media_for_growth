@@ -72,7 +72,7 @@ const Login = () => {
     }
 
     return (
-      <div className='text-sm flex justify-center items-center h-screen customsm:overflow-hidden'>
+      <div className='text-sm flex justify-center items-center h-screen customsm:overflow-hidden bg-white'>
         <div className="w-full flex justify-center items-center h-screen xl:w-1/2">
           <div className="border-2 border-customBorderPurple rounded-3xl text-start  customsm:border-none" style={{ width: "450px", height: "480px", padding: '10px 70px' }}>
             <h1 className="mt-14 font-semibold text-xl text-center">Get More Access</h1>
