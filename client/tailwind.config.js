@@ -18,6 +18,9 @@ export default {
       fontSize: {
         label: '15px'
       },
+      width: {
+        customButtonWidth: '310px',
+      },
     },
     screens: {
       navSearch: '810px',
