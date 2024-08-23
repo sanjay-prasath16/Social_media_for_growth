@@ -21,6 +21,7 @@ export default {
     },
     screens: {
       navSearch: '810px',
+      xl: '1280px',
     }
   },
   plugins: [],
