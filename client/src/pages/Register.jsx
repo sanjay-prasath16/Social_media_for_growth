@@ -99,7 +99,7 @@ const Register = () => {
   };
 
   return (
-      <div className='text-sm flex justify-center items-center h-screen customsm:overflow-hidden bg-white'>
+      <div className='text-sm flex justify-center items-center h-screen customsm:overflow-hidden bg-white register'>
           <div className="w-full flex justify-center items-center h-screen xl:w-1/2">
               <div className="border-2 border-customBorderPurple rounded-3xl text-start customsm:border-none ml-20" style={{ width: "450px", height: "570px", padding: '10px 70px' }}>
                   <h1 className="mt-12 font-semibold text-xl text-center">Register</h1>

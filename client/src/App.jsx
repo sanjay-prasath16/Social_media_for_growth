@@ -1,22 +1,63 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
+import Network from './pages/Network';
+import Message from './pages/messaging';
+import Notification from './pages/Notifications';
+import Profile from './pages/Profile';
+import Layout from './components/Layout'
 import Terms from './components/termsAndConditions';
-import PageNotFound from './components/PageNotFound'
+import PageNotFound from './components/PageNotFound';
 import './styles/index.css'
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      element: <Layout />,
+      children: [
+        {
+          path: '/home',
+          element: <Home />
+        },
+        {
+          path: '/connection',
+          element: <Network />
+        },
+        {
+          path: '/message',
+          element: <Message />
+        },
+        {
+          path: '/notification',
+          element: <Notification />
+        },
+        {
+          path: '/profile',
+          element: <Profile />
+        },
+      ]
+    },
+    {
+      path: '/',
+      element: <Login />
+    },
+    {
+      path: '/register',
+      element: <Register />
+    },
+    {
+      path: '/policies',
+      element: <Terms />
+    },
+    {
+      path: '*',
+      element: <PageNotFound />
+    }
+  ]);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Login />}></Route>
-        <Route path='/register' element={<Register />}></Route>
-        <Route path='/policies' element={<Terms />}></Route>
-        <Route path='/home' element={<Home />}></Route>
-        <Route path='*' element={<PageNotFound />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <RouterProvider router={router} />
   )
 }
 

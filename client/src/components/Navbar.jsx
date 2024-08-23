@@ -1,84 +1,60 @@
-import { useState, useEffect } from "react";
+import { CiSearch } from "react-icons/ci";
+import { TiHome } from "react-icons/ti";
+import { IoPeopleSharp } from "react-icons/io5";
+import { AiFillMessage } from "react-icons/ai";
+import { IoNotifications } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-    const [query, setQuery] = useState("");
-    const [results, setResults] = useState([]);
-    const [recentSearches, setRecentSearches] = useState([]);
-    const [isTyping, setIsTyping] = useState(false);
+    const { pathname } = useLocation();
+    const subPage = pathname.split('/')?.[1] || 'home';
 
-    // Load recent searches from local storage when the component mounts
-    useEffect(() => {
-        const storedSearches = JSON.parse(localStorage.getItem("recentSearches")) || [];
-        setRecentSearches(storedSearches);
-    }, []);
+    const getLinkClasses = (type) => {
+        const isActive = subPage === type;
+        let linkClasses = 'cursor-pointer flex flex-col items-center';
+        let iconAndTextClasses = 'text-iconGray';
 
-    // Function to handle storing recent searches
-    const handleSearch = () => {
-        if (query.trim() !== "") {
-            const updatedSearches = [query, ...recentSearches.filter((item) => item !== query)].slice(0, 2);
-            setRecentSearches(updatedSearches);
-            localStorage.setItem("recentSearches", JSON.stringify(updatedSearches));
+        if (isActive) {
+            linkClasses += ' border-b-2 border-black';
+            iconAndTextClasses = 'text-black';
         }
-    };
 
-    // Handle input changes and search
-    const handleInputChange = (e) => {
-        setQuery(e.target.value);
-        setIsTyping(true);
+        return { linkClasses, iconAndTextClasses };
     };
-
-    // Handle Enter key press
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-            handleSearch();
-            setQuery(""); // Clear the input after storing the search
-        }
-    };
-
-    // Show recent searches when clicking on the search bar if no query
-    const handleFocus = () => {
-        if (!query) {
-            setResults(recentSearches);
-            setIsTyping(true);
-        }
-    };
-
-    // Handle clicking outside the search box to reset the background and close suggestions
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (event.target.tagName !== "INPUT") {
-                setIsTyping(false);
-            }
-        };
-        document.addEventListener("click", handleClickOutside);
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, []);
 
     return (
-        <div className={`relative min-h-screen ${isTyping ? "bg-gray-900 bg-opacity-50" : "bg-white"}`}>
-            {/* Search Input */}
-            <div className="flex justify-center pt-10">
+        <div className="relative bg-white flex justify-between" style={{ height: '3.8rem' }}>
+            <div className="flex pt-3">
                 <input
                     type="text"
                     placeholder="Search"
-                    value={query}
-                    onChange={handleInputChange}
-                    onKeyPress={handleKeyPress} // Listen for Enter key
-                    onFocus={handleFocus}
-                    className="border rounded-md p-2 w-80 search text-black outline-none"
+                    className="border border-none rounded-md p-2 w-72 h-10 search outline-none ml-5 pl-8 mb-2 hidden navSearch:block"
                 />
+                <CiSearch className="absolute ml-7 text-lg" style={{ marginTop: '0.6rem' }} />
             </div>
-            {isTyping && results.length > 0 && (
-                <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-md p-4 w-80 z-10">
-                    {results.map((item, index) => (
-                        <div key={index} className="p-2 border-b border-gray-200">
-                            <h3 className="font-semibold">{item}</h3>
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className="flex gap-10 mr-10">
+                <Link to='/home' className={getLinkClasses('home').linkClasses}>
+                    <TiHome className={`text-3xl mt-2 ${getLinkClasses('home').iconAndTextClasses}`} />
+                    <span className={`text-sm ${getLinkClasses('home').iconAndTextClasses}`}>Home</span>
+                </Link>
+                <Link to='/connection' className={getLinkClasses('connection').linkClasses}>
+                    <IoPeopleSharp className={`text-3xl mt-2 ${getLinkClasses('connection').iconAndTextClasses}`} />
+                    <span className={`text-sm ${getLinkClasses('connection').iconAndTextClasses}`}>My Network</span>
+                </Link>
+                <Link to='/message' className={getLinkClasses('message').linkClasses}>
+                    <AiFillMessage className={`text-2xl mt-3 ${getLinkClasses('message').iconAndTextClasses}`} />
+                    <span className={`text-sm ${getLinkClasses('message').iconAndTextClasses}`}>Messaging</span>
+                </Link>
+                <Link to='/notification' className={getLinkClasses('notification').linkClasses}>
+                    <IoNotifications className={`text-2xl mt-3 ${getLinkClasses('notification').iconAndTextClasses}`} />
+                    <span className={`text-sm ${getLinkClasses('notification').iconAndTextClasses}`}>Notifications</span>
+                </Link>
+                <Link to='/profile' className={getLinkClasses('profile').linkClasses}>
+                    <CgProfile className={`text-2xl mt-3 ${getLinkClasses('profile').iconAndTextClasses}`} />
+                    <span className={`text-sm ${getLinkClasses('profile').iconAndTextClasses}`}>Me</span>
+                </Link>
+            </div>
         </div>
     );
 };

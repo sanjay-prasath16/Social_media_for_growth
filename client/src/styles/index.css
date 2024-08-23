@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,12 +9,21 @@
     /* Register */
 
     body {
-        background: #F4F2EE;
-        font-family: "Roboto Slab", Arial, sans-serif;
+        @apply bg-bgGray;
+        font-family: "Varela Round", sans-serif;
         font-optical-sizing: auto;
         font-weight: 400;
         font-style: normal;
     }
+
+    .register, .login {
+        font-family: "Roboto Slab", Arial, sans-serif;
+    }
+
+    .search::placeholder {
+        @apply text-gray-600;
+    }
+
     .input {
         @apply border-2 rounded-xl w-80 h-14 pl-5 text-sm border-white focus:outline-none focus:border-customInputBorderPurple bg-customGray;
         transition: 0.1s ease;
@@ -52,7 +62,7 @@
     }
 
     .dropdown-content::-webkit-scrollbar {
-        display: none; /* for Chrome, Safari, and Opera */
+        display: none;
     }
 
     .search {
