@@ -1,61 +1,219 @@
+import Logo from '../assets/logo.webp';
 import { CiSearch } from "react-icons/ci";
+import { WiTime4 } from "react-icons/wi";
 import { TiHome } from "react-icons/ti";
 import { IoPeopleSharp } from "react-icons/io5";
 import { AiFillMessage } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
 
 const Navbar = () => {
+    const [input, setInput] = useState('');
+    const [results, setResults] = useState([]);
+    const [recentSearches, setRecentSearches] = useState([]);
+    const [isSearchActive, setIsSearchActive] = useState(false);
+    const [isMobileSearchActive, setIsMobileSearchActive] = useState(false);
+    const searchRef = useRef(null);
+    const popularSearches = ['React.js', 'JavaScript', 'Tailwind CSS', 'Node.js', 'MongoDB'];
+
+    const fetchData = (value) => {
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(json => {
+                const results = json.filter((user) => {
+                    return value && user && user.name && user.name.toLowerCase().includes(value.toLowerCase());
+                });
+                setResults(results);
+            });
+    };
+
+    const handleChange = (value) => {
+        setInput(value);
+        fetchData(value);
+    };
+
+    const storeSearchTerm = (value) => {
+        if (!value) return;
+
+        const updatedSearches = [value, ...recentSearches.filter(item => item !== value)].slice(0, 3);
+        setRecentSearches(updatedSearches);
+        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+
+        setInput('');
+        setIsSearchActive(false);
+        setIsMobileSearchActive(false);
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            storeSearchTerm(input);
+        }
+    };
+
+    const handleResultClick = (value) => {
+        storeSearchTerm(value);
+    };
+
+    useEffect(() => {
+        const storedSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+        setRecentSearches(storedSearches);
+    }, []);
+
+    const handleFocus = () => {
+        setIsSearchActive(true);
+    };
+
+    const handleMobileSearchToggle = () => {
+        setIsMobileSearchActive(true);
+        setIsSearchActive(true);
+    };
+
+    const handleClickOutside = (e) => {
+        if (searchRef.current && !searchRef.current.contains(e.target)) {
+            setIsSearchActive(false);
+            setIsMobileSearchActive(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isSearchActive) {
+            document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside);
+        }
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [isSearchActive]);
+
     const { pathname } = useLocation();
     const subPage = pathname.split('/')?.[1] || 'home';
 
     const getLinkClasses = (type) => {
         const isActive = subPage === type;
-        let linkClasses = 'cursor-pointer flex flex-col items-center';
-        let iconAndTextClasses = 'text-iconGray';
+        let linkClasses = 'cursor-pointer flex flex-col items-center text-iconGray text-sm hover:text-black';
 
         if (isActive) {
-            linkClasses += ' border-b-2 border-black';
-            iconAndTextClasses = 'text-black';
+            linkClasses += ' border-b-2 border-black text-black';
         }
 
-        return { linkClasses, iconAndTextClasses };
+        return { linkClasses, isActive };
     };
 
     return (
-        <div className="relative bg-white flex justify-between" style={{ height: '3.8rem' }}>
-            <div className="flex pt-3">
-                <input
-                    type="text"
-                    placeholder="Search"
-                    className="border border-none rounded-md p-2 w-72 h-10 search outline-none ml-5 pl-8 mb-2 hidden navSearch:block"
-                />
-                <CiSearch className="absolute ml-7 text-lg" style={{ marginTop: '0.6rem' }} />
+        <>
+            {isSearchActive && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>
+            )}
+
+            <div className="relative bg-white flex justify-between z-20" style={{ height: '3.8rem' }}>
+                <div className={`flex ${isMobileSearchActive ? 'w-full' : ''}`} ref={searchRef}>
+                    {!isMobileSearchActive && <img src={Logo} alt="" className='h-12 mt-1 moveIcon:ml-icon' />}
+                    <div className="relative flex-1">
+                        <input
+                            type="text"
+                            placeholder="Search"
+                            value={input}
+                            onFocus={handleFocus}
+                            onChange={(e) => handleChange(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            className={`border border-none rounded-md p-2 w-full h-10 search outline-none pl-8 mb-2 mt-3 ${isMobileSearchActive ? 'block' : 'hidden navSearch:block'}`}
+                        />
+                        <CiSearch
+                            className={`text-lg absolute ${isMobileSearchActive ? 'hidden' : 'block'}`}
+                            style={{ left: '0.6rem', top: '1.4rem' }}
+                            onClick={handleMobileSearchToggle}
+                        />
+                        {isSearchActive && (
+                            <div className="absolute bg-white border border-gray-300 rounded-md w-full mt-1 shadow-lg z-30">
+                                {input && results.length > 0 ? (
+                                    results.map((result, id) => (
+                                        <div key={id} className='flex ml-2 pt-2 pb-2'>
+                                            <CiSearch className='mr-2' />
+                                            <div
+                                                onClick={() => handleResultClick(result.name)}
+                                                className="cursor-pointer"
+                                                style={{ marginTop: '-5px'}}
+                                            >
+                                                {result.name}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : recentSearches.length > 0 ? (
+                                    <>
+                                        <div className="p-2 font-bold text-sm">Recent</div>
+                                        {recentSearches.map((item, index) => (
+                                            <div key={index} className='flex ml-2 pt-2 pb-2'>
+                                                <WiTime4 className='mr-2' />
+                                                <div
+                                                    onClick={() => handleResultClick(item)}
+                                                    className="cursor-pointer"
+                                                    style={{ marginTop: '-5px'}}
+                                                >
+                                                    {item}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div className="p-2 font-bold text-sm">Try popular searches</div>
+                                        {popularSearches.map((item, index) => (
+                                            <div key={index} className='flex ml-2 pt-2 pb-2'>
+                                                <CiSearch className='mr-2' />
+                                                <div
+                                                    onClick={() => handleResultClick(item)}
+                                                    className="cursor-pointer"
+                                                    style={{ marginTop: '-5px'}}
+                                                >
+                                                    {item}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="p-2 text-gray-500">No recent searches</div>
+                                        <div className="p-2 font-bold text-sm">Try popular searches</div>
+                                        {popularSearches.map((item, index) => (
+                                            <div key={index} className='flex ml-2 pt-2 pb-2'>
+                                                <CiSearch className='mr-2' />
+                                                <div
+                                                    onClick={() => handleResultClick(item)}
+                                                    className="cursor-pointer"
+                                                    style={{ marginTop: '-5px'}}
+                                                >
+                                                    {item}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className={`flex gap-8 removeName:gap-10 navSearch:mr-20 mr-10 ${isMobileSearchActive ? 'hidden' : ''}`}>
+                    <Link to='/home' className={getLinkClasses('home').linkClasses}>
+                        <TiHome className={`text-2xl mt-5 removeName:mt-3 ${getLinkClasses('home').isActive ? 'text-black' : 'hover:text-black'} ${isMobileSearchActive ? 'block' : ''}`} />
+                        <span className={`${getLinkClasses('home').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>Home</span>
+                    </Link>
+                    <Link to='/connection' className={getLinkClasses('connection').linkClasses}>
+                        <IoPeopleSharp className={`text-2xl mt-5 removeName:mt-3 ${getLinkClasses('connection').isActive ? 'text-black' : 'hover:text-black'}`} />
+                        <span className={`${getLinkClasses('connection').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>My Network</span>
+                    </Link>
+                    <Link to='/message' className={getLinkClasses('message').linkClasses}>
+                        <AiFillMessage className={`text-xl mt-5 removeName:mt-4 ${getLinkClasses('message').isActive ? 'text-black' : 'hover:text-black'}`} />
+                        <span className={`${getLinkClasses('message').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>Messaging</span>
+                    </Link>
+                    <Link to='/notification' className={getLinkClasses('notification').linkClasses}>
+                        <IoNotifications className={`text-xl mt-5 removeName:mt-4 ${getLinkClasses('notification').isActive ? 'text-black' : 'hover:text-black'}`} />
+                        <span className={`${getLinkClasses('notification').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>Notifications</span>
+                    </Link>
+                    <Link to='/profile' className={getLinkClasses('profile').linkClasses}>
+                        <CgProfile className={`text-xl mt-5 removeName:mt-4 ${getLinkClasses('profile').isActive ? 'text-black' : 'hover:text-black'}`} />
+                        <span className={`${getLinkClasses('profile').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>Me</span>
+                    </Link>
+                </div>
             </div>
-            <div className="flex gap-10 mr-10">
-                <Link to='/home' className={getLinkClasses('home').linkClasses}>
-                    <TiHome className={`text-3xl mt-2 ${getLinkClasses('home').iconAndTextClasses}`} />
-                    <span className={`text-sm ${getLinkClasses('home').iconAndTextClasses}`}>Home</span>
-                </Link>
-                <Link to='/connection' className={getLinkClasses('connection').linkClasses}>
-                    <IoPeopleSharp className={`text-3xl mt-2 ${getLinkClasses('connection').iconAndTextClasses}`} />
-                    <span className={`text-sm ${getLinkClasses('connection').iconAndTextClasses}`}>My Network</span>
-                </Link>
-                <Link to='/message' className={getLinkClasses('message').linkClasses}>
-                    <AiFillMessage className={`text-2xl mt-3 ${getLinkClasses('message').iconAndTextClasses}`} />
-                    <span className={`text-sm ${getLinkClasses('message').iconAndTextClasses}`}>Messaging</span>
-                </Link>
-                <Link to='/notification' className={getLinkClasses('notification').linkClasses}>
-                    <IoNotifications className={`text-2xl mt-3 ${getLinkClasses('notification').iconAndTextClasses}`} />
-                    <span className={`text-sm ${getLinkClasses('notification').iconAndTextClasses}`}>Notifications</span>
-                </Link>
-                <Link to='/profile' className={getLinkClasses('profile').linkClasses}>
-                    <CgProfile className={`text-2xl mt-3 ${getLinkClasses('profile').iconAndTextClasses}`} />
-                    <span className={`text-sm ${getLinkClasses('profile').iconAndTextClasses}`}>Me</span>
-                </Link>
-            </div>
-        </div>
+        </>
     );
 };
 

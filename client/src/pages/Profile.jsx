@@ -2,7 +2,7 @@
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <div className="flex mt-6"></div>
   )
 }
 

@@ -21,10 +21,21 @@ export default {
       width: {
         customButtonWidth: '310px',
       },
+      margin: {
+        icon: '3.5rem',
+      },
     },
     screens: {
-      navSearch: '810px',
+      navSearch: '870px',
+      removeName: '672px',
+      moveIcon: '996px',
+      thirdBorder: '797px',
+      borderCol: '768px',
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
       xl: '1280px',
+      twoxl: '1536px',
     }
   },
   plugins: [],
