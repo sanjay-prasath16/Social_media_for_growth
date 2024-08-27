@@ -6,6 +6,7 @@ import Network from './pages/Network';
 import Message from './pages/messaging';
 import Notification from './pages/Notifications';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings'
 import Layout from './components/Layout'
 import Terms from './components/termsAndConditions';
 import PageNotFound from './components/PageNotFound';
@@ -49,6 +50,10 @@ function App() {
     {
       path: '/policies',
       element: <Terms />
+    },
+    {
+      path: '/settings',
+      element: <Settings />
     },
     {
       path: '*',

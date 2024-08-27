@@ -13,7 +13,8 @@ export default {
         customBlue: '#000932',
         customBorderPurple: '#DDCEEA',
         customInputBorderPurple: '#9C8AAE',
-        customIconColor: '#9C8AAE'
+        customIconColor: '#9C8AAE',
+        profileColor: '#F8FAFD'
       },
       fontSize: {
         label: '15px'
@@ -23,6 +24,7 @@ export default {
       },
       margin: {
         icon: '3.5rem',
+        down: '0.2rem'
       },
     },
     screens: {

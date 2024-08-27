@@ -1,11 +1,13 @@
+import ProfileIcon from '../assets/defaultProfile.png'
 import Logo from '../assets/logo.webp';
+import ProfileDropdown from './ProfileDropdown';
 import { CiSearch } from "react-icons/ci";
 import { WiTime4 } from "react-icons/wi";
 import { TiHome } from "react-icons/ti";
 import { IoPeopleSharp } from "react-icons/io5";
 import { AiFillMessage } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
-import { CgProfile } from "react-icons/cg";
+import { MdArrowDropDown } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 
@@ -17,6 +19,8 @@ const Navbar = () => {
     const [isMobileSearchActive, setIsMobileSearchActive] = useState(false);
     const searchRef = useRef(null);
     const popularSearches = ['React.js', 'JavaScript', 'Tailwind CSS', 'Node.js', 'MongoDB'];
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const profileRef = useRef(null);
 
     const fetchData = (value) => {
         fetch('https://jsonplaceholder.typicode.com/users')
@@ -77,6 +81,16 @@ const Navbar = () => {
         }
     };
 
+    const toggleDropdown = () => {
+        setIsDropdownOpen(prev => !prev);
+    };
+
+    const closeDropdown = (e) => {
+        if (profileRef.current && !profileRef.current.contains(e.target)) {
+            setIsDropdownOpen(false);
+        }
+    };
+
     useEffect(() => {
         if (isSearchActive) {
             document.addEventListener('click', handleClickOutside);
@@ -85,6 +99,16 @@ const Navbar = () => {
         }
         return () => document.removeEventListener('click', handleClickOutside);
     }, [isSearchActive]);
+
+    useEffect(() => {
+        if (isDropdownOpen) {
+            document.addEventListener('click', closeDropdown);
+        } else {
+            document.removeEventListener('click', closeDropdown);
+        }
+
+        return () => document.removeEventListener('click', closeDropdown);
+    }, [isDropdownOpen]);
 
     const { pathname } = useLocation();
     const subPage = pathname.split('/')?.[1] || 'home';
@@ -207,10 +231,24 @@ const Navbar = () => {
                         <IoNotifications className={`text-xl mt-5 removeName:mt-4 ${getLinkClasses('notification').isActive ? 'text-black' : 'hover:text-black'}`} />
                         <span className={`${getLinkClasses('notification').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>Notifications</span>
                     </Link>
-                    <Link to='/profile' className={getLinkClasses('profile').linkClasses}>
-                        <CgProfile className={`text-xl mt-5 removeName:mt-4 ${getLinkClasses('profile').isActive ? 'text-black' : 'hover:text-black'}`} />
-                        <span className={`${getLinkClasses('profile').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:block`}>Me</span>
-                    </Link>
+                    <div className={getLinkClasses('profile').linkClasses}>
+                        <div ref={profileRef} className="relative">
+                            <img
+                                src={ProfileIcon}
+                                className={`w-6 mt-5 removeName:mt-3 removeName:ml-1 ${getLinkClasses('profile').isActive ? 'text-black' : 'hover:text-black'}`}
+                                onClick={toggleDropdown}
+                            />
+                            <span className={`${getLinkClasses('profile').isActive ? 'text-black' : 'hover:text-black'} hidden removeName:flex-row removeName:flex`} onClick={toggleDropdown} >
+                                Me<MdArrowDropDown className='mt-down' />
+                            </span>
+
+                            {isDropdownOpen && (
+                                <div className="absolute right-0 mt-5 w-64 bg-white border border-gray-300 rounded-md shadow-lg z-50">
+                                    <ProfileDropdown closeDropdown={toggleDropdown} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
