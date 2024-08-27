@@ -1,6 +1,7 @@
 import background from '../assets/defaultBackground.jpg'
 import ProfileCamera from '../assets/profileCamera.png'
 import Camera from '../assets/camera.webp'
+import { BiPencil } from "react-icons/bi";
 
 const Profile = () => {
   return (
@@ -15,9 +16,17 @@ const Profile = () => {
         <div className='rounded-full w-40 h-40 z-10 border-white ml-10 bg-profileColor absolute flex justify-center items-center cursor-pointer' style={{ marginTop: '-4rem' }}>
           <img src={ProfileCamera} alt="" className='w-24 h-20' />
         </div>
+        <div className="flex justify-end">
+          <span className='hover:border-gray-300 hover:bg-gray-200 hover:rounded-full cursor-pointer p-2 mr-5 mt-2'>
+            <BiPencil className='text-xl' />
+          </span>
+        </div>
         <div className='ml-7'>
-          <h1 className='mt-28'>Sanjay</h1>
-          <p>Desc</p>
+          <h1 className='mt-16'>Sanjay</h1>
+          <div className='flex'>
+            <p>Desc</p>
+          </div>
+          <div className="border border-gray-400 bg-white h-40 mt-10"></div>
         </div>
       </div>
       <div className="w-1/4 border border-solid bg-white ml-10 mr-20 rounded-lg hidden lg:block"></div>
@@ -25,4 +34,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default Profile;
