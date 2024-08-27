@@ -60,8 +60,6 @@ const Register = () => {
 
   const showpassword = () => {
       setShowPassword(!showPassword);
-      const updatedIconColor = [...iconColor];
-      setIconColor(updatedIconColor);
   };
 
   const handleInputChange = (event) => {
@@ -74,8 +72,7 @@ const Register = () => {
 
   const [iconColor, setIconColor] = useState([
       {icon: <FaUser />, colorClass: 'text-gray-600', iconColor: false, label: 'Username', type: 'text', id: 'username'},
-      {icon: <MdAlternateEmail />, colorClass: 'text-gray-600', iconColor: false, label: 'Email', type: 'text', id: 'email'},
-      {icon: <TbLock />, colorClass: 'text-gray-600', iconColor: false, label: 'Password', type: showPassword ? 'password' : 'text', id: 'password'}
+      {icon: <MdAlternateEmail />, colorClass: 'text-gray-600', iconColor: false, label: 'Email', type: 'text', id: 'email'}
   ]);
 
   const inputClicked = (index) => {
@@ -110,33 +107,13 @@ const Register = () => {
                                   <input
                                       type={item.type}
                                       value={data[item.id]}
-                                      id={item.label}
+                                      id={item.id}
                                       className={`input ${data[item.id] ? 'border-customInputBorderPurple' : ''}`}
                                       onFocus={() => inputClicked(index)}
                                       onBlur={() => inputNotClicked(index)}
-                                      onChange={(event) => {
-                                          handleInputChange(event, item.id);
-                                          switch (item.id) {
-                                              case 'username':
-                                                  setData(prevData => ({ ...prevData, username: event.target.value }));
-                                                  break;
-                                              case 'email':
-                                                  setData(prevData => ({ ...prevData, email: event.target.value }));
-                                                  break;
-                                              case 'password':
-                                                  setData(prevData => ({ ...prevData, password: event.target.value }));
-                                                  break;
-                                              default:
-                                                  break;
-                                          }
-                                      }}
+                                      onChange={(event) => handleInputChange(event)}
                                       autoComplete='off'
                                   />
-                                  {item.id === 'password' && (
-                                      <div className='absolute top-5 right-2 customsm:left-72'>
-                                          <span onClick={showpassword} className='text-gray-400 cursor-pointer customsm:ml-auto'>{showPassword ? <HiEye /> : <HiEyeOff />}</span>
-                                      </div>
-                                  )}
                                   <div className={`label ${data[item.id] ? "has-content" : ""} ${iconColor[index].iconColor ? "text-customIconColor" : ""}`}>
                                       <span className='icon'>{item.icon}</span>
                                       <span style={{ marginTop: '-2px' }} className='labelText'>{item.label}</span>
@@ -144,6 +121,33 @@ const Register = () => {
                               </div>
                           </div>
                       ))}
+
+                      {/* Password Field */}
+                      <div className='container'>
+                          <div className='relative mt-6'>
+                              <input
+                                  type={showPassword ? 'text' : 'password'}
+                                  value={data.password}
+                                  id='password'
+                                  className={`input ${data.password ? 'border-customInputBorderPurple' : ''}`}
+                                  onFocus={() => inputClicked(2)}
+                                  onBlur={() => inputNotClicked(2)}
+                                  onChange={handleInputChange}
+                                  autoComplete='off'
+                              />
+                              <div className='absolute top-5 right-2 customsm:left-72'>
+                                  <span onClick={showpassword} className='text-gray-400 cursor-pointer customsm:ml-auto'>
+                                      {showPassword ? <HiEye /> : <HiEyeOff />}
+                                  </span>
+                              </div>
+                              <div className={`label ${data.password ? "has-content" : ""} ${iconColor[2]?.iconColor ? "text-customIconColor" : ""}`}>
+                                  <span className='icon'><TbLock /></span>
+                                  <span style={{ marginTop: '-2px' }} className='labelText'>Password</span>
+                              </div>
+                          </div>
+                      </div>
+
+                      {/* Career Selector */}
                       <div className='relative mt-5'>
                           <div onClick={careerToggleDown} className={`flex justify-between items-center w-80 p-4 bg-customGray rounded-xl cursor-pointer text-gray-400`}>
                               {data.career || 'Select Career Role'}
@@ -174,6 +178,7 @@ const Register = () => {
                               )}
                           </div>
                       </div>
+
                       <p className='font-normal ml-3' style={{ fontSize: '0.7rem'}}>By clicking Register, you agree to our <Link to='/policies' className='text-customBlue font-semibold cursor-pointer underline'>User Agreement</Link></p>
                       <button className={`mt-5 border border-customBlue p-2 w-customButtonWidth rounded-xl bg-customBlue text-white font-semibold text-base`}>Register</button>
                       <div className='mt-2 text-gray-400 text-center'>
