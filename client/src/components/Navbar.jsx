@@ -130,7 +130,7 @@ const Navbar = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-10"></div>
             )}
 
-            <div className="relative bg-white flex justify-between z-20" style={{ height: '3.8rem' }}>
+            <div className="sticky top-0 bg-white flex justify-between z-20" style={{ height: '3.8rem' }}>
                 <div className={`flex ${isMobileSearchActive ? 'w-full' : ''}`} ref={searchRef}>
                     {!isMobileSearchActive && <img src={Logo} alt="" className='h-12 mt-1 moveIcon:ml-icon' />}
                     <div className="relative flex-1">

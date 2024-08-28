@@ -21,10 +21,17 @@ export default {
       },
       width: {
         customButtonWidth: '310px',
+        borderWidth: '6.2rem',
+        postCreationWidth: '48rem',
+      },
+      height: {
+        postCreationHeight: '38rem',
       },
       margin: {
         icon: '3.5rem',
-        down: '0.2rem'
+        down: '0.2rem',
+        borderDown: '-5rem',
+        defaultBorderDown: '-3rem',
       },
     },
     screens: {
