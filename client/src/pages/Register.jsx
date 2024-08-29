@@ -13,7 +13,8 @@ const Register = () => {
   const [data, setData] = useState({
       username: '',
       email: '',
-      password: ''
+      password: '',
+      career: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [careerOptions] = useState([
@@ -71,20 +72,21 @@ const Register = () => {
   };
 
   const [iconColor, setIconColor] = useState([
-      {icon: <FaUser />, colorClass: 'text-gray-600', iconColor: false, label: 'Username', type: 'text', id: 'username'},
-      {icon: <MdAlternateEmail />, colorClass: 'text-gray-600', iconColor: false, label: 'Email', type: 'text', id: 'email'}
+    {icon: <FaUser />, colorClass: 'text-gray-600', iconColor: false, label: 'Username', type: 'text', id: 'username'},
+    {icon: <MdAlternateEmail />, colorClass: 'text-gray-600', iconColor: false, label: 'Email', type: 'text', id: 'email'},
+    {icon: <TbLock />, colorClass: 'text-gray-600', iconColor: false, label: 'Password', type: 'password', id: 'password'}
   ]);
 
   const inputClicked = (index) => {
-      const updatedIconColor = [...iconColor];
-      updatedIconColor[index].iconColor = true;
-      setIconColor(updatedIconColor);
+    const updatedIconColor = [...iconColor];
+    updatedIconColor[index].iconColor = true;
+    setIconColor(updatedIconColor);
   };
 
   const inputNotClicked = (index) => {
-      const updatedIconColor = [...iconColor];
-      updatedIconColor[index].iconColor = false;
-      setIconColor(updatedIconColor);
+    const updatedIconColor = [...iconColor];
+    updatedIconColor[index].iconColor = false;
+    setIconColor(updatedIconColor);
   };
 
   const handleSearch = (e) => {
@@ -105,7 +107,7 @@ const Register = () => {
                           <div key={index} className='container'>
                               <div className='relative mt-6'>
                                   <input
-                                      type={item.type}
+                                      type={item.id === 'password' && showPassword ? 'text' : item.type}
                                       value={data[item.id]}
                                       id={item.id}
                                       className={`input ${data[item.id] ? 'border-customInputBorderPurple' : ''}`}
@@ -118,34 +120,17 @@ const Register = () => {
                                       <span className='icon'>{item.icon}</span>
                                       <span style={{ marginTop: '-2px' }} className='labelText'>{item.label}</span>
                                   </div>
+                                  {/* Add eye icon for password field */}
+                                  {item.id === 'password' && (
+                                      <div className='absolute top-5 right-2'>
+                                          <span onClick={showpassword} className='text-gray-400 cursor-pointer'>
+                                              {showPassword ? <HiEye /> : <HiEyeOff />}
+                                          </span>
+                                      </div>
+                                  )}
                               </div>
                           </div>
                       ))}
-
-                      {/* Password Field */}
-                      <div className='container'>
-                          <div className='relative mt-6'>
-                              <input
-                                  type={showPassword ? 'text' : 'password'}
-                                  value={data.password}
-                                  id='password'
-                                  className={`input ${data.password ? 'border-customInputBorderPurple' : ''}`}
-                                  onFocus={() => inputClicked(2)}
-                                  onBlur={() => inputNotClicked(2)}
-                                  onChange={handleInputChange}
-                                  autoComplete='off'
-                              />
-                              <div className='absolute top-5 right-2 customsm:left-72'>
-                                  <span onClick={showpassword} className='text-gray-400 cursor-pointer customsm:ml-auto'>
-                                      {showPassword ? <HiEye /> : <HiEyeOff />}
-                                  </span>
-                              </div>
-                              <div className={`label ${data.password ? "has-content" : ""} ${iconColor[2]?.iconColor ? "text-customIconColor" : ""}`}>
-                                  <span className='icon'><TbLock /></span>
-                                  <span style={{ marginTop: '-2px' }} className='labelText'>Password</span>
-                              </div>
-                          </div>
-                      </div>
 
                       {/* Career Selector */}
                       <div className='relative mt-5'>
