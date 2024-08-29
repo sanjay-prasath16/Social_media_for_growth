@@ -7,9 +7,16 @@ import { BiPencil } from "react-icons/bi";
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
-  const [postImage, setPostImage] = useState(null);  // State to store the uploaded post image
+  const [postImage, setPostImage] = useState(null);
+  const [name, setName] = useState("sanjay s");
+  const [description, setDescription] = useState("Desc");
+
+  // Temporary states for modal editing
+  const [tempName, setTempName] = useState(name);
+  const [tempDescription, setTempDescription] = useState(description);
 
   const handleCreatePostClick = () => {
     setShowModal(true);
@@ -17,7 +24,23 @@ const Profile = () => {
 
   const closeModal = () => {
     setShowModal(false);
-    setPostImage(null); // Reset the post image when modal is closed
+    setPostImage(null);
+  };
+
+  const openProfileModal = () => {
+    setTempName(name); // Set temp states to current profile values
+    setTempDescription(description);
+    setShowProfileModal(true);
+  };
+
+  const closeProfileModal = () => {
+    setShowProfileModal(false);
+  };
+
+  const saveProfileChanges = () => {
+    setName(tempName); // Update profile with temp values
+    setDescription(tempDescription);
+    closeProfileModal();
   };
 
   const handleFileChange = (e) => {
@@ -30,7 +53,7 @@ const Profile = () => {
         } else if (e.target.id === "profileFileInput") {
           setProfilePicture(reader.result);
         } else if (e.target.id === "postFileInput") {
-          setPostImage(reader.result);  // Set the post image
+          setPostImage(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -77,14 +100,17 @@ const Profile = () => {
             />
           </div>
           <div className="flex justify-end">
-            <span className='hover:border-gray-300 hover:bg-gray-200 hover:rounded-full cursor-pointer p-2 mr-5 mt-2'>
+            <span 
+              className='hover:border-gray-300 hover:bg-gray-200 hover:rounded-full cursor-pointer p-2 mr-5 mt-2'
+              onClick={openProfileModal}
+            >
               <BiPencil className='text-2xl' />
             </span>
           </div>
           <div className='ml-7'>
-            <h1 className='mt-4 lg:mt-12 text-xl font-extrabold'>sanjay s</h1>
+            <h1 className='mt-4 lg:mt-12 text-xl font-extrabold'>{name}</h1>
             <div className='flex'>
-              <p>Desc</p>
+              <p>{description}</p>
             </div>
             <p className='text-blue-800 font-semibold leading-none hover:border-b w-borderWidth mb-5 mt-1 hover:border-b-blue-800 cursor-pointer'>1 connection</p>
           </div>
@@ -149,7 +175,45 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Hidden file inputs */}
+      {showProfileModal && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-postCreationWidth flex flex-col relative">
+            <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
+            <div className="mb-4">
+              <label className="block text-lg font-semibold">Name</label>
+              <input
+                type="text"
+                value={tempName}
+                onChange={(e) => setTempName(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+                placeholder="Enter your name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-lg font-semibold">Description</label>
+              <textarea
+                value={tempDescription}
+                onChange={(e) => setTempDescription(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg"
+                placeholder="Enter a brief description"
+              />
+            </div>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={closeProfileModal}
+                className="border h-10 text-blue-600 pl-3 pr-3 rounded-lg text-lg font-semibold border-blue-600 hover:border-2 hover:bg-blue-50">
+                Cancel
+              </button>
+              <button
+                onClick={saveProfileChanges}
+                className="ml-4 bg-blue-600 text-white h-10 pl-3 pr-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <input 
         id="backgroundFileInput" 
         type="file" 

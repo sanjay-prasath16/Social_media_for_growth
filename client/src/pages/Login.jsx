@@ -22,62 +22,13 @@ const Login = () => {
     const loginUser = async (e) => {
       e.preventDefault();
       try {
-       console.log("ssk")
-       console.log(data.username)
-       console.log(data.password)
         const response = await api.post('/',data);
-        // console.log(response.data);
         toast.success(response.data);
         navigate('/home');
     } catch (err) {
         toast.error(err.response.data);
     }
   };
-
-  //   const loginUser = async (e) => {
-  //     e.preventDefault();
-  //     try {
-  //       console.log("hhs")
-  //         const response = await appi.post('/', data);
-  //         toast.success(response.data);
-  //         navigate('/home');
-  //     } catch (err) {
-  //         if (err.response) {
-  //             const errorMessage = err.response.data || "An unexpected error occurred";
-  //             toast.error(errorMessage);
-  //         } else {
-  //             toast.error("An unexpected error occurred");
-  //         }
-  //         // Optionally suppress specific console error messages
-  //         if (err.response && err.response.status === 401) {
-  //             console.warn = () => {}; // Example of suppressing console warnings
-  //         }
-  //     }
-  // };
-  
-
-    // const loginUser = async (e) => {
-    //   e.preventDefault();
-    //   const { username, password } = data;
-    //   try {
-    //     const { data:responseData } = await axios.post('/login', {
-    //       username, 
-    //       password
-    //     });
-    //     if(responseData.err) {
-    //       toast.error(responseData.err)
-    //     } else {
-    //       toast.success('Welcome Back!Lets pick up where you left off.')
-    //       if (responseData.role === 'admin') {
-    //         navigate('/dashboard');
-    //       } else {
-    //         navigate('/');
-    //       }
-    //     }
-    //   } catch(err) {
-    //     console.log(err);
-    //   }
-    // };
 
     const showpassword = () => {
       setShowPassword(!showPassword);
