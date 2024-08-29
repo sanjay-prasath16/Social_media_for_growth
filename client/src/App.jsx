@@ -11,6 +11,7 @@ import Layout from './components/Layout'
 import Terms from './components/termsAndConditions';
 import PageNotFound from './components/PageNotFound';
 import './styles/index.css'
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const router = createBrowserRouter([
@@ -62,7 +63,10 @@ function App() {
   ]);
 
   return (
-    <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} />
+      <Toaster position='top-center' toastOptions={{duration: 2000}} />
+    </>
   )
 }
 

@@ -39,6 +39,9 @@ const Profile = () => {
 
   const triggerFileInput = (inputId) => {
     document.getElementById(inputId).click();
+    if(inputId==='backgroundFileInput'){
+      
+    }
   };
 
   return (
@@ -137,6 +140,7 @@ const Profile = () => {
                 Cancel
               </button>
               <button
+                     onClick={closeModal}
                 className="ml-4 bg-blue-600 text-white h-10 pl-3 pr-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
                 Post
               </button>

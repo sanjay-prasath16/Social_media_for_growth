@@ -5,7 +5,7 @@ import { HiEye, HiEyeOff } from "react-icons/hi";
 import { MdAlternateEmail } from "react-icons/md";
 import { FaChevronDown } from 'react-icons/fa6';
 import SignupImage from '../assets/register_login.png';
-import axios from 'axios';
+import api from '../api/base'
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
@@ -13,7 +13,8 @@ const Register = () => {
   const [data, setData] = useState({
       username: '',
       email: '',
-      password: ''
+      password: '',
+      userCareerRole:''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [careerOptions] = useState([
@@ -40,23 +41,39 @@ const Register = () => {
   };
 
   const registerUser = async (e) => {
-      e.preventDefault();
-      const { username, email, password } = data;
-      try {
-          const { data: responseData } = await axios.post('/register', {
-              username, email, password
-          });
-          if (responseData.err) {
-              toast.error(responseData.err);
-          } else {
-              setData({});
-              toast.success('Congratulations! You are officially part of us. Let\'s get started');
-              navigate('/login');
+    e.preventDefault();
+    const registerUser = async (e) => {
+        e.preventDefault();
+          try {
+               console.log("insude");
+              const response = await api.post('/registers', data);
+              console.log(response.data);
+              toast.success(response.data);
+              navigate('/Home');
+          } catch (err) {
+              toast.error(err.response.data);
           }
-      } catch (err) {
-          console.log(err);
-      }
-  };
+      };
+};
+
+//   const registerUser = async (e) => {
+//       e.preventDefault();
+//       const { username, email, password } = data;
+//       try {
+//           const { data: responseData } = await axios.post('/registers', {
+//               username, email, password
+//           });
+//           if (responseData.err) {
+//               toast.error(responseData.err);
+//           } else {
+//               setData({});
+//               toast.success('Congratulations! You are officially part of us. Let\'s get started');
+//               navigate('/login');
+//           }
+//       } catch (err) {
+//           console.log(err);
+//       }
+//   };
 
   const showpassword = () => {
       setShowPassword(!showPassword);
