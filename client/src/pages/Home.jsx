@@ -1,4 +1,11 @@
+import { userContext } from "../context/userContext";
+import { useContext } from "react";
+
 const Home = () => {
+
+  const {userDeatil}=useContext(userContext);
+  console.log(userDeatil);
+
   return (
     <div className="flex mt-6 borderCol:flex-row flex-col items-center">
       <div className="border border-solid bg-white rounded-2xl mx-6 lg:ml-20 lg:mr-6 borderCol:w-2/6 thirdBorder:w-1/5 h-52 borderCol:h-screen w-3/4"></div>

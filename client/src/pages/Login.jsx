@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FaUser } from "react-icons/fa6";
 import { TbLock } from "react-icons/tb";
 import { HiEye, HiEyeOff } from "react-icons/hi";
@@ -6,9 +6,8 @@ import SignupImage from '../assets/register_login.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import api from '../api/base'
-
 import '../styles/index.css'
-import axios from 'axios';
+import { userContext } from '../context/userContext';
 
 const Login = () => {
     const [data, setData] = useState({
@@ -19,12 +18,36 @@ const Login = () => {
     const navigate = useNavigate();
 
 
+    const {setuserDetail}=useContext(userContext);
+
     const loginUser = async (e) => {
       e.preventDefault();
       try {
-        const response = await api.post('/',data);
-        toast.success(response.data);
-        navigate('/home');
+        // const response = await api.post('/',data);
+        // const data=response.data;
+        // setuserDetail(data);
+        // toast.success("Login Successful");
+        // navigate('/home');
+        const response = await api.post('/', data);
+
+        // Check if response is undefined
+        if (!response) {
+            throw new Error('Server did not return a response.');
+        }
+        
+
+        // Log the response object to understand its structure
+        console.log('Response from server:', response);
+
+        // Check if response.data exists
+        if (response.data) {
+            const userData = response.data;
+            setuserDetail(userData);
+            toast.success("Login Successful");
+            navigate('/home');
+        } else {
+            throw new Error('Unexpected response format: No data property found.');
+        }
     } catch (err) {
         toast.error(err.response.data);
     }
@@ -129,4 +152,4 @@ const Login = () => {
     );
 }
 
-export default Login
+export default Login;

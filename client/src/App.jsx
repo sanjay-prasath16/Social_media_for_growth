@@ -12,6 +12,8 @@ import Terms from './components/termsAndConditions';
 import PageNotFound from './components/PageNotFound';
 import './styles/index.css'
 import { Toaster } from 'react-hot-toast';
+import { UserProvider } from './context/userContext';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   const router = createBrowserRouter([
@@ -59,14 +61,20 @@ function App() {
     {
       path: '*',
       element: <PageNotFound />
+    },
+    {
+      path:'/data',
+      element:<UserProfile/>
     }
   ]);
 
   return (
-    <>
+    
+    <UserProvider>
       <RouterProvider router={router} />
       <Toaster position='top-center' toastOptions={{duration: 2000}} />
-    </>
+      </UserProvider>
+    
   )
 }
 
